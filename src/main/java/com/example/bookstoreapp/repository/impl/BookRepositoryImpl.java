@@ -37,6 +37,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        return entityManager.createQuery("SELECT b BOOK b").getResultList();
+        return entityManager.createQuery("from Book", Book.class)
+                .getResultList();
     }
 }
