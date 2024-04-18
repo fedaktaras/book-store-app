@@ -1,11 +1,10 @@
 package com.example.bookstoreapp.repository.impl;
 
+import com.example.bookstoreapp.model.Book;
+import com.example.bookstoreapp.repository.BookRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
-import com.example.bookstoreapp.model.Book;
-import com.example.bookstoreapp.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,11 +15,11 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Book save(Book book) {
-         if (book.getId() == null) {
-             entityManager.persist(book);
-         } else {
-             entityManager.merge(book);
-         }
+        if (book.getId() == null) {
+            entityManager.persist(book);
+        } else {
+            entityManager.merge(book);
+        }
         return book;
     }
 
