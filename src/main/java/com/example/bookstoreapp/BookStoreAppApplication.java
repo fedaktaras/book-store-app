@@ -1,8 +1,8 @@
 package com.example.bookstoreapp;
 
-import java.math.BigDecimal;
 import com.example.bookstoreapp.model.Book;
 import com.example.bookstoreapp.servive.BookService;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +18,7 @@ public class BookStoreAppApplication {
     public static void main(String[] args) {
         SpringApplication.run(BookStoreAppApplication.class, args);
     }
+
     @Bean
     public CommandLineRunner commandLineRunner() {
         return args -> {
