@@ -3,41 +3,46 @@ package com.example.bookstoreapp.repository.impl;
 import com.example.bookstoreapp.model.Book;
 import com.example.bookstoreapp.repository.BookRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class BookRepositoryImpl implements BookRepository {
+    private final EntityManagerFactory entityManagerFactory;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    public BookRepositoryImpl(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
     @Override
     public Book save(Book book) {
-        if (book.getId() == null) {
-            entityManager.persist(book);
-        } else {
-            entityManager.merge(book);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            if (book.getId() == null) {
+                entityManager.persist(book);
+            } else {
+                entityManager.merge(book);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new RuntimeException("Can`t create or merge Book", e);
+        } finally {
+            entityManager.close();
         }
         return book;
     }
 
     @Override
-    public void delete(Book book) {
-        if (book != null) {
-            entityManager.remove(book);
-        }
-    }
-
-    @Override
-    public Book findById(Long id) {
-        return entityManager.find(Book.class, id);
-    }
-
-    @Override
     public List<Book> findAll() {
-        return entityManager.createQuery("from Book", Book.class)
-                .getResultList();
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            return entityManager.createQuery("from Book", Book.class)
+                    .getResultList();
+        }
     }
 }
