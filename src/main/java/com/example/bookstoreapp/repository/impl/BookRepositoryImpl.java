@@ -40,8 +40,10 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> findAll() {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            return entityManager.createQuery("from Book", Book.class)
+            return entityManager.createQuery("FROM Book", Book.class)
                     .getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Can`t get all Books", e);
         }
     }
 }
