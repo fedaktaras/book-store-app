@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BookServiceImpl implements BookService {
+    @Autowired
     private BookMapper bookMapper;
     @Autowired
     private BookRepository bookRepository;
@@ -45,5 +46,10 @@ public class BookServiceImpl implements BookService {
         bookMapper.updateBookFromDto(bookDto, existingBook);
         Book updatedBook = bookRepository.save(existingBook);
         return bookMapper.bookToBookDto(updatedBook);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
     }
 }
