@@ -1,7 +1,12 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: your_username
+      author: Taras_Fedak
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: books
       changes:
         - createTable:
             tableName: books
@@ -12,7 +17,6 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
-                    nullable: false
               - column:
                   name: title
                   type: varchar(255)
