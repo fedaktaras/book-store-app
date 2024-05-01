@@ -1,12 +1,14 @@
 package com.example.bookstoreapp.dto;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
 public class BookUpdateDto {
+    @NotBlank
     private String title;
     @Min(value = 0)
     private BigDecimal price;
