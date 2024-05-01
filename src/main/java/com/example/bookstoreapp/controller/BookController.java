@@ -4,6 +4,7 @@ import com.example.bookstoreapp.dto.BookDto;
 import com.example.bookstoreapp.dto.BookRequestDto;
 import com.example.bookstoreapp.dto.BookUpdateDto;
 import com.example.bookstoreapp.servive.BookService;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,21 +40,21 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> createBook(@RequestBody BookRequestDto bookDto) {
+    public ResponseEntity<BookDto> createBook(@RequestBody @Valid BookRequestDto bookDto) {
         BookDto createdBook = bookService.save(bookDto);
         return ResponseEntity.ok(createdBook);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<BookDto> updateBook(@PathVariable Long id,
-                                              @RequestBody BookUpdateDto bookUpdateDto) {
+                                              @RequestBody @Valid BookUpdateDto bookUpdateDto) {
         BookDto bookDtoUpdated = bookService.updateBook(bookUpdateDto, id);
         return ResponseEntity.ok(bookDtoUpdated);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<BookDto> updateBook(@PathVariable Long id,
-                                              @RequestBody BookRequestDto bookRequestDto) {
+                                              @RequestBody @Valid BookRequestDto bookRequestDto) {
         BookDto bookDtoUpdated = bookService.updateBook(bookRequestDto, id);
         return ResponseEntity.ok(bookDtoUpdated);
     }
