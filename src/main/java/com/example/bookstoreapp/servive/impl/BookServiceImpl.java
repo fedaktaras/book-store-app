@@ -10,6 +10,7 @@ import com.example.bookstoreapp.servive.BookService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,8 +31,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> findAll() {
-        return bookRepository.findAll().stream()
+    public List<BookDto> findAll(Pageable pageable) {
+        return bookRepository.findAll(pageable).stream()
                 .map(bookMapper::toDtoBook)
                 .toList();
     }
@@ -56,7 +57,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto updateBook(BookRequestDto bookRequestDto, Long id) {
         bookRepository.findById(id).orElseThrow(() ->
-                        new EntityNotFoundException("Book not found with id: " + id));
+                new EntityNotFoundException("Book not found with id: " + id));
         Book book = bookMapper.toBook(bookRequestDto);
         book.setId(id);
         Book updatedBook = bookRepository.save(book);
