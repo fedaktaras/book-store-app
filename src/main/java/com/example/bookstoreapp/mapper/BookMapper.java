@@ -7,8 +7,10 @@ import com.example.bookstoreapp.dto.BookUpdateDto;
 import com.example.bookstoreapp.model.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(config = MapperConfig.class,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface BookMapper {
 
     BookDto toDtoBook(Book book);
