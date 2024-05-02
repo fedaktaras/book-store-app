@@ -4,11 +4,9 @@ import com.example.bookstoreapp.dto.BookDto;
 import com.example.bookstoreapp.dto.BookRequestDto;
 import com.example.bookstoreapp.dto.BookUpdateDto;
 import com.example.bookstoreapp.servive.BookService;
-import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,40 +21,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
+    private final BookService bookService;
 
     @Autowired
-    private BookService bookService;
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<BookDto>> getAll() {
-        List<BookDto> books = bookService.findAll();
-        return ResponseEntity.ok(books);
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookDto> getAll() {
+        return bookService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDto> getBookById(@PathVariable Long id) {
-        BookDto bookDto = bookService.getBookById(id);
-        return ResponseEntity.ok(bookDto);
+    @ResponseStatus(HttpStatus.OK)
+    public BookDto getBookById(@PathVariable Long id) {
+        return bookService.getBookById(id);
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> createBook(@RequestBody @Valid BookRequestDto bookDto) {
-        BookDto createdBook = bookService.save(bookDto);
-        return ResponseEntity.ok(createdBook);
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookDto createBook(@RequestBody BookRequestDto bookDto) {
+        return bookService.save(bookDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<BookDto> updateBook(@PathVariable Long id,
-                                              @RequestBody @Valid BookUpdateDto bookUpdateDto) {
-        BookDto bookDtoUpdated = bookService.updateBook(bookUpdateDto, id);
-        return ResponseEntity.ok(bookDtoUpdated);
+    @ResponseStatus(HttpStatus.OK)
+    public BookDto updateBook(@PathVariable Long id, @RequestBody BookUpdateDto bookUpdateDto) {
+        return bookService.updateBook(bookUpdateDto, id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookDto> updateBook(@PathVariable Long id,
-                                              @RequestBody @Valid BookRequestDto bookRequestDto) {
-        BookDto bookDtoUpdated = bookService.updateBook(bookRequestDto, id);
-        return ResponseEntity.ok(bookDtoUpdated);
+    @ResponseStatus(HttpStatus.OK)
+    public BookDto updateBook(@PathVariable Long id, @RequestBody BookRequestDto bookRequestDto) {
+        return bookService.updateBook(bookRequestDto, id);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
