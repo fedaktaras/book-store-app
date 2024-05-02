@@ -14,10 +14,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BookServiceImpl implements BookService {
+    private final BookMapper bookMapper;
+    private final BookRepository bookRepository;
+
     @Autowired
-    private BookMapper bookMapper;
-    @Autowired
-    private BookRepository bookRepository;
+    public BookServiceImpl(BookMapper bookMapper, BookRepository bookRepository) {
+        this.bookMapper = bookMapper;
+        this.bookRepository = bookRepository;
+    }
 
     @Override
     public BookDto save(BookRequestDto bookRequestDto) {
