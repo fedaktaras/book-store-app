@@ -14,10 +14,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BookServiceImpl implements BookService {
+    private final BookMapper bookMapper;
+    private final BookRepository bookRepository;
+
     @Autowired
-    private BookMapper bookMapper;
-    @Autowired
-    private BookRepository bookRepository;
+    public BookServiceImpl(BookMapper bookMapper, BookRepository bookRepository) {
+        this.bookMapper = bookMapper;
+        this.bookRepository = bookRepository;
+    }
 
     @Override
     public BookDto save(BookRequestDto bookRequestDto) {
@@ -51,9 +55,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto updateBook(BookRequestDto bookRequestDto, Long id) {
-        Book existingBook = bookRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Book not found with id: " + id));
+        bookRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Book not found with id: " + id));
         Book book = bookMapper.toBook(bookRequestDto);
         book.setId(id);
         Book updatedBook = bookRepository.save(book);

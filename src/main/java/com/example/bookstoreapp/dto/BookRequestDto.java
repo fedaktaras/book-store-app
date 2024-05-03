@@ -3,13 +3,13 @@ package com.example.bookstoreapp.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import lombok.Data;
+import org.hibernate.validator.constraints.ISBN;
 
 @Data
 public class BookRequestDto {
-    @NotBlank
+    @NotBlank(message = "Title cannot be blank")
     @NotNull
     private String title;
     @NotNull
@@ -19,7 +19,7 @@ public class BookRequestDto {
     @NotNull
     private String author;
     @NotNull
-    @Pattern(regexp = "^(978|979)[-]?\\d{10}$", message = "Invalid ISBN")
+    @ISBN
     private String isbn;
     @NotNull
     private String description;
