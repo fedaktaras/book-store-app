@@ -4,8 +4,11 @@ import com.example.bookstoreapp.dto.BookDto;
 import com.example.bookstoreapp.dto.BookRequestDto;
 import com.example.bookstoreapp.dto.BookUpdateDto;
 import com.example.bookstoreapp.servive.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Book management", description = "Endpoints for management books")
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -30,8 +34,8 @@ public class BookController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BookDto> getAll() {
-        return bookService.findAll();
+    public List<BookDto> getAll(Pageable pageable) {
+        return bookService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -41,6 +45,7 @@ public class BookController {
     }
 
     @PostMapping
+    @Operation(summary = "Create a new book", description = "Create a new book")
     @ResponseStatus(HttpStatus.CREATED)
     public BookDto createBook(@RequestBody BookRequestDto bookDto) {
         return bookService.save(bookDto);
