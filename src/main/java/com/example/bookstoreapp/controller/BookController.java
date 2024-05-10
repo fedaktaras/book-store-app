@@ -34,12 +34,14 @@ public class BookController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public List<BookDto> getAll(Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
@@ -55,6 +57,7 @@ public class BookController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BookDto updateBook(@PathVariable Long id, @RequestBody BookUpdateDto bookUpdateDto) {
         return bookService.updateBook(bookUpdateDto, id);
     }
@@ -67,7 +70,7 @@ public class BookController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         bookService.deleteById(id);
