@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 06
+      author: Taras_Fedak
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: tarasfedak@me.com
+              - column:
+                  name: password
+                  value: $2a$10$xI/zaKrcqG233jbZfDqcTuk9awwq6oQN9LOpnRwFgYrxGcfOfi7qa
+              - column:
+                  name: first_name
+                  value: Taras
+              - column:
+                  name: last_name
+                  value: Fedak
+              - column:
+                  name: shipping_address
+                  value: null
