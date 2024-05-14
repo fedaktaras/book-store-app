@@ -7,6 +7,7 @@ import com.example.bookstoreapp.mapper.UserMapper;
 import com.example.bookstoreapp.model.User;
 import com.example.bookstoreapp.repository.UserRepository;
 import com.example.bookstoreapp.servive.UserService;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto)
             throws RegistrationException {
-        if (userRepository.findByEmail(userRegistrationRequestDto.getEmail()).isPresent()) {
-            throw new RegistrationException("User with such email already exists");
+        Optional<User> optionalUser = userRepository
+                .findByEmail(userRegistrationRequestDto.getEmail());
+        if (optionalUser.isPresent()) {
+            throw new RegistrationException("User with such email: %s already exists"
+                    .formatted(optionalUser.get().getEmail()));
         }
-        User newUser = userMapper.registerUserDtoToUser(userRegistrationRequestDto);
+        User newUser = userMapper.toEntity(userRegistrationRequestDto);
         User savedUser = userRepository.save(newUser);
-        return userMapper.userToUserResponseDto(savedUser);
+        return userMapper.toDto(savedUser);
     }
 }
