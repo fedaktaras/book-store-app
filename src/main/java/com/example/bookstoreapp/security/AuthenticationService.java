@@ -23,8 +23,4 @@ public class AuthenticationService {
         String token = jwtUtil.generateToken(authentication);
         return new UserLoginResponseDto(token);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 3a24967 (Security jwt partly implemented)
