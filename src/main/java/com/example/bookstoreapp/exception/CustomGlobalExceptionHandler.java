@@ -65,7 +65,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP_KEY, LocalDateTime.now());
         body.put(STATUS_KEY, HttpStatus.BAD_REQUEST);
-        body.put(ERRORS_KEY, "User with such username exists: " + ex.getMessage());
+        body.put(ERRORS_KEY, ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
