@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: 07
       author: Taras_Fedak
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: "SELECT COUNT(*) FROM users_roles WHERE user_id = (SELECT id FROM users WHERE email = 'tarasfedak@me.com') AND roles_id = (SELECT id FROM roles WHERE role = 'ADMIN')"
       changes:
         - insert:
             tableName: users_roles
