@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 04
+      author: Taras_Fedak
+      changes:
+        - createTable:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_id
+                    references: users(id)
+                    primaryKey: true
+                    primaryKeyName: pk_users_roles
+              - column:
+                  name: roles_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_role_id
+                    references: roles(id)
+                    primaryKey: true
+                    primaryKeyName: pk_users_roles
