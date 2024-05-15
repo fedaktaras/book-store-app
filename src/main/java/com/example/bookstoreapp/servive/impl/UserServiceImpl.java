@@ -5,6 +5,7 @@ import com.example.bookstoreapp.dto.UserResponseDto;
 import com.example.bookstoreapp.exception.RegistrationException;
 import com.example.bookstoreapp.mapper.UserMapper;
 import com.example.bookstoreapp.model.User;
+import com.example.bookstoreapp.model.Role;
 import com.example.bookstoreapp.repository.RoleRepository;
 import com.example.bookstoreapp.repository.UserRepository;
 import com.example.bookstoreapp.servive.UserService;
@@ -34,7 +35,6 @@ public class UserServiceImpl implements UserService {
                     .formatted(optionalUser.get().getEmail()));
         }
         User newUser = userMapper.toEntity(userRegistrationRequestDto);
-        User newUser = userMapper.registerUserDtoToUser(userRegistrationRequestDto);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         Role userRole = roleRepository.findByRole(Role.RoleName.USER)
                 .orElseThrow(() -> new RegistrationException("Default role not found"));
