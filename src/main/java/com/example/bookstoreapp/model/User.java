@@ -16,8 +16,6 @@ import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
@@ -91,42 +89,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return !isDeleted;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        User user = (User) o;
-
-        return new EqualsBuilder()
-                .append(isDeleted(), user.isDeleted())
-                .append(getId(), user.getId())
-                .append(getEmail(), user.getEmail())
-                .append(getPassword(), user.getPassword())
-                .append(getFirstName(), user.getFirstName())
-                .append(getLastName(), user.getLastName())
-                .append(getShippingAddress(), user.getShippingAddress())
-                .append(getRoles(), user.getRoles())
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(getId())
-                .append(getEmail())
-                .append(getPassword())
-                .append(getFirstName())
-                .append(getLastName())
-                .append(getShippingAddress())
-                .append(isDeleted())
-                .append(getRoles())
-                .toHashCode();
-    }
-
 }
