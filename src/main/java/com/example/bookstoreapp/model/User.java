@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.Collection;
 import java.util.Set;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -25,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
 @SQLRestriction("is_deleted = false")
+@EqualsAndHashCode
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User implements UserDetails {
     @Id
@@ -50,6 +52,7 @@ public class User implements UserDetails {
     private boolean isDeleted = false;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @EqualsAndHashCode.Exclude
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
