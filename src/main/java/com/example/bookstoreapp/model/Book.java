@@ -9,8 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -27,10 +25,6 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
 @SQLRestriction("is_deleted = false")
 @Table(name = "books")
-@NamedEntityGraph(
-        name = "book-with-categories",
-        attributeNodes = @NamedAttributeNode("categories")
-)
 public class Book {
 
     @Id
@@ -47,7 +41,7 @@ public class Book {
     private String description;
     private String coverImage;
     @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "books_categories",
             joinColumns = @JoinColumn(name = "book_id"),
