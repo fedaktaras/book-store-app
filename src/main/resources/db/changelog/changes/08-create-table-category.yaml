@@ -1,15 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 1
+      id: 08
       author: Taras_Fedak
-      preConditions:
-        onFail: MARK_RAN
-        not:
-          tableExists:
-            tableName: books
       changes:
         - createTable:
-            tableName: books
+            tableName: categories
             columns:
               - column:
                   name: id
@@ -17,32 +12,14 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
+                    nullable: false
               - column:
-                  name: title
+                  name: name
                   type: varchar(255)
                   constraints:
                     nullable: false
-              - column:
-                  name: price
-                  type: decimal(19,2)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: author
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: isbn
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-                    unique: true
               - column:
                   name: description
-                  type: varchar(2048)
-              - column:
-                  name: coverImage
                   type: varchar(255)
               - column:
                   name: is_deleted
@@ -50,3 +27,6 @@ databaseChangeLog:
                   defaultValueBoolean: false
                   constraints:
                     nullable: false
+      rollback:
+        - dropTable:
+            tableName: category

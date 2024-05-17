@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 09
+      author: Taras_Fedak
+      changes:
+        - createTable:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_id
+                    references: books(id)
+                    primaryKey: true
+                    primaryKeyName: pk_books_categories
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_category_id
+                    references: categories(id)
+                    primaryKey: true
+                    primaryKeyName: pk_books_categories
+rollback:
+  - dropTable:
+      tableName: books_categories
