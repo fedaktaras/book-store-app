@@ -3,6 +3,7 @@ package com.example.bookstoreapp.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.Set;
 import lombok.Data;
 import org.hibernate.validator.constraints.ISBN;
 
@@ -17,4 +18,5 @@ public class BookUpdateDto {
     private String isbn;
     private String description;
     private String coverImage;
+    private Set<Long> categoryIds;
 }

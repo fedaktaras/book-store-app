@@ -64,6 +64,13 @@ public class BookServiceImpl implements BookService {
         return bookMapper.toDtoBook(updatedBook);
     }
 
+    public List<BookDto> findAllByCategoryId(Long categoryId, Pageable pageable) {
+        return bookRepository.findAllByCategoryId(categoryId, pageable)
+                .stream()
+                .map(bookMapper::toDtoBook)
+                .toList();
+    }
+
     @Override
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
