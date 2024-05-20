@@ -56,7 +56,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put(TIMESTAMP_KEY, LocalDateTime.now());
         body.put(STATUS_KEY, HttpStatus.INTERNAL_SERVER_ERROR);
         body.put(ERRORS_KEY, ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(RegistrationException.class)

@@ -3,6 +3,7 @@ package com.example.bookstoreapp.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
     private String firstFieldName;
@@ -20,8 +21,7 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
             Object firstObj = getFieldValue(o, firstFieldName);
             Object secondObj = getFieldValue(o, secondFieldName);
 
-            return (firstObj == null && secondObj == null)
-                    || (firstObj != null && firstObj.equals(secondObj));
+            return (Objects.equals(firstObj, secondObj));
         } catch (ReflectiveOperationException | NullPointerException e) {
             throw new RuntimeException("Annotation does not "
                     + "work well. Check annotations properties.", e);
