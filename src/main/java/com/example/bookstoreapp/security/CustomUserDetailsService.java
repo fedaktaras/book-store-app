@@ -1,5 +1,6 @@
 package com.example.bookstoreapp.security;
 
+import com.example.bookstoreapp.model.User;
 import com.example.bookstoreapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
