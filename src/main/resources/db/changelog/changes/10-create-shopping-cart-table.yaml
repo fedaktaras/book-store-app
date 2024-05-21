@@ -21,7 +21,7 @@ databaseChangeLog:
             baseTableName: shopping_cart
             baseColumnNames: id
             constraintName: fk_shopping_cart_user
-            referencedTableName: user
+            referencedTableName: users
             referencedColumnNames: id
       rollback:
         - dropTable:
