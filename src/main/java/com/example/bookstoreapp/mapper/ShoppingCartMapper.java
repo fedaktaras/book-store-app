@@ -16,11 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
         uses = CartItemMapper.class)
 public abstract class ShoppingCartMapper {
     @Autowired
-    CartItemMapper cartItemMapper;
+    private CartItemMapper cartItemMapper;
+
     public abstract ShoppingCartDto toDto(ShoppingCart shoppingCart);
 
     public abstract ShoppingCart toEntity(ShoppingCartDto shoppingCartDto);
-
 
     public Set<CartItem> dtosToEntities(Set<CartItemDto> cartItemDtos) {
         return cartItemDtos.stream()

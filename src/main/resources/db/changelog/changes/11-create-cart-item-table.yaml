@@ -42,7 +42,7 @@ databaseChangeLog:
             baseTableName: cart_item
             baseColumnNames: book_id
             constraintName: fk_cart_item_book
-            referencedTableName: book
+            referencedTableName: books
             referencedColumnNames: id
       rollback:
         - dropTable:
