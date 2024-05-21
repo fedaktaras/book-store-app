@@ -76,11 +76,4 @@ public class BookController {
         bookService.deleteById(id);
     }
 
-    @GetMapping("/category/{categoryId}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    @ResponseStatus(HttpStatus.OK)
-    public List<BookDto> getBooksByCategory(@PathVariable Long categoryId, Pageable pageable) {
-        return bookService.findAllByCategoryId(categoryId, pageable);
-    }
-
 }
