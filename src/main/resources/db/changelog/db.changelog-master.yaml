@@ -13,3 +13,7 @@ databaseChangeLog:
       file: db/changelog/changes/06-create-admin.yaml
   - include:
       file: db/changelog/changes/07-insert-ADMIN-to-id-1.yaml
+  - include:
+      file: db/changelog/changes/08-create-table-category.yaml
+  - include:
+      file: db/changelog/changes/09-create-book-category-table.yaml
