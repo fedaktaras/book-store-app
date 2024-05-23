@@ -8,6 +8,7 @@ import com.example.bookstoreapp.model.Role;
 import com.example.bookstoreapp.model.ShoppingCart;
 import com.example.bookstoreapp.model.User;
 import com.example.bookstoreapp.repository.RoleRepository;
+import com.example.bookstoreapp.repository.ShoppingCartRepository;
 import com.example.bookstoreapp.repository.UserRepository;
 import com.example.bookstoreapp.servive.UserService;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto)
@@ -62,5 +64,12 @@ public class UserServiceImpl implements UserService {
 
     public Long getCurrentUserId() {
         return getCurrentUser().getId();
+    }
+
+    @Override
+    public ShoppingCart getCurrentUserShoppingCart() {
+        return shoppingCartRepository.findById(getCurrentUserId())
+                .orElseThrow(() -> new RuntimeException("Can't find shopping cart"
+                        + " by user id"));
     }
 }

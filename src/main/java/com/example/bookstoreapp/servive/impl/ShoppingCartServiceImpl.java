@@ -13,6 +13,7 @@ import com.example.bookstoreapp.repository.UserRepository;
 import com.example.bookstoreapp.servive.ShoppingCartService;
 import com.example.bookstoreapp.servive.UserService;
 import jakarta.transaction.Transactional;
+import java.util.HashSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -66,7 +67,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void deleteById(Long id) {
-        ShoppingCart shoppingCart = getUsersShoppingCart();
+        ShoppingCart shoppingCart = getCurrentUsersShoppingCart();
         CartItem cartItem = getCartItemFromUsersShoppingCart(id);
         shoppingCart.getCartItems().remove(cartItem);
         shoppingCartRepository.save(shoppingCart);
@@ -75,7 +76,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto editCartItem(Long id, CartItemDto cartItemDto) {
-        ShoppingCart usersShoppingCart = getUsersShoppingCart();
+        ShoppingCart usersShoppingCart = getCurrentUsersShoppingCart();
         CartItem cartItem = cartItemMapper.toEntity(cartItemDto);
         cartItem.setShoppingCart(usersShoppingCart);
         cartItemRepository.save(cartItem);
@@ -91,7 +92,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     private CartItem getCartItemFromUsersShoppingCart(Long id) {
-        ShoppingCart shoppingCart = getUsersShoppingCart();
+        ShoppingCart shoppingCart = getCurrentUsersShoppingCart();
         return shoppingCart.getCartItems().stream()
                 .filter(item -> item.getId().equals(id))
                 .findFirst()
@@ -99,8 +100,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         + "delete this item"));
     }
 
-    private ShoppingCart getUsersShoppingCart() {
+    private ShoppingCart getCurrentUsersShoppingCart() {
         Long userId = userService.getCurrentUserId();
         return shoppingCartRepository.findById(userId).get();
+    }
+
+    @Transactional
+    public void clearShoppingCart() {
+        ShoppingCart shoppingCart = getCurrentUsersShoppingCart();
+        shoppingCart.getCartItems().forEach(cartItem -> {
+            cartItemRepository.deleteById(cartItem.getId());
+        });
+        shoppingCart.setCartItems(new HashSet<CartItem>());
+        shoppingCartRepository.save(shoppingCart);
     }
 }
