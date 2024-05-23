@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,10 +41,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderDto createOrder(PlaceOrderDto placeOrderDto) {
         ShoppingCartDto shoppingCartDto = shoppingCartService.getShoppingCart();
         Order order = orderMapper.toEntity(mapShoppingCartDtoToOrderDto(shoppingCartDto));
         Order saved = orderRepository.save(order);
+        shoppingCartService.clearShoppingCart();
         return orderMapper.toDto(saved);
     }
 
