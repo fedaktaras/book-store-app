@@ -10,8 +10,8 @@ import com.example.bookstoreapp.model.User;
 import com.example.bookstoreapp.repository.CartItemRepository;
 import com.example.bookstoreapp.repository.ShoppingCartRepository;
 import com.example.bookstoreapp.repository.UserRepository;
-import com.example.bookstoreapp.security.CustomUserDetailsService;
 import com.example.bookstoreapp.servive.ShoppingCartService;
+import com.example.bookstoreapp.servive.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private ShoppingCartMapper shoppingCartMapper;
     private final CartItemRepository cartItemRepository;
     private final ShoppingCartRepository shoppingCartRepository;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final UserService userService;
     private final UserRepository userRepository;
 
     @Override
@@ -76,18 +76,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCartDto editCartItem(Long id, CartItemDto cartItemDto) {
         ShoppingCart usersShoppingCart = getUsersShoppingCart();
-        CartItem cartItemFromUsersShoppingCart = getCartItemFromUsersShoppingCart(id);
         CartItem cartItem = cartItemMapper.toEntity(cartItemDto);
         cartItem.setShoppingCart(usersShoppingCart);
         cartItemRepository.save(cartItem);
         return shoppingCartMapper.toDto(shoppingCartRepository
-                .findById(customUserDetailsService.getCurrentUserId()).get());
+                .findById(userService.getCurrentUserId()).get());
     }
 
     @Override
     public ShoppingCartDto getShoppingCart() {
         ShoppingCart shoppingCart = shoppingCartRepository
-                .findById(customUserDetailsService.getCurrentUserId()).orElseThrow();
+                .findById(userService.getCurrentUserId()).orElseThrow();
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
@@ -101,7 +100,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     private ShoppingCart getUsersShoppingCart() {
-        Long userId = customUserDetailsService.getCurrentUserId();
+        Long userId = userService.getCurrentUserId();
         return shoppingCartRepository.findById(userId).get();
     }
 }
