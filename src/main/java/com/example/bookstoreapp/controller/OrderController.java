@@ -1,6 +1,7 @@
 package com.example.bookstoreapp.controller;
 
 import com.example.bookstoreapp.dto.OrderDto;
+import com.example.bookstoreapp.dto.OrderItemDto;
 import com.example.bookstoreapp.dto.PlaceOrderDto;
 import com.example.bookstoreapp.dto.StatusDto;
 import com.example.bookstoreapp.servive.OrderService;
@@ -11,8 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Order", description = "Order")
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
@@ -41,11 +43,27 @@ public class OrderController {
         return orderService.createOrder(placeOrderDto);
     }
 
-    @PutMapping
+    @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update status", description = "Update status")
     @ResponseStatus(HttpStatus.OK)
-    public OrderDto updateStatus(@RequestBody StatusDto statusDto) {
-        return orderService.updateStatus(statusDto);
+    public OrderDto updateStatus(@RequestBody StatusDto statusDto, @PathVariable Long id) {
+        return orderService.updateStatus(statusDto, id);
+    }
+
+    @GetMapping("{orderId}/items/{itemId}")
+    @PreAuthorize("hasRole('USER')")
+    @Operation(summary = "Get order item", description = "Get order item")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderItemDto getOrderItem(@PathVariable Long orderId, @PathVariable Long itemId) {
+        return orderService.getOrderItemFromOrder(orderId, itemId);
+    }
+
+    @GetMapping("{orderId}/items")
+    @PreAuthorize("hasRole('USER')")
+    @Operation(summary = "Get order item", description = "Get order item")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderDto getOrder(@PathVariable Long orderId) {
+        return orderService.getOrder(orderId);
     }
 }

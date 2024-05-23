@@ -6,8 +6,10 @@ import com.example.bookstoreapp.dto.OrderItemDto;
 import com.example.bookstoreapp.dto.PlaceOrderDto;
 import com.example.bookstoreapp.dto.ShoppingCartDto;
 import com.example.bookstoreapp.dto.StatusDto;
+import com.example.bookstoreapp.mapper.OrderItemMapper;
 import com.example.bookstoreapp.mapper.OrderMapper;
 import com.example.bookstoreapp.model.Order;
+import com.example.bookstoreapp.model.OrderItem;
 import com.example.bookstoreapp.model.Status;
 import com.example.bookstoreapp.model.User;
 import com.example.bookstoreapp.repository.BookRepository;
@@ -15,10 +17,12 @@ import com.example.bookstoreapp.repository.OrderRepository;
 import com.example.bookstoreapp.servive.OrderService;
 import com.example.bookstoreapp.servive.ShoppingCartService;
 import com.example.bookstoreapp.servive.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +34,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserService userService;
     private final ShoppingCartService shoppingCartService;
     private final OrderMapper orderMapper;
+    private final OrderItemMapper orderItemMapper;
 
     @Override
     public List<OrderDto> getAllOrders() {
@@ -51,8 +56,34 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto updateStatus(StatusDto statusDto) {
-        return null;
+    public OrderDto updateStatus(StatusDto statusDto, Long id) {
+        Order order = orderRepository.findById(id).orElseThrow();
+        order.setStatus(statusDto.getStatus());
+        Order saved = orderRepository.save(order);
+        return orderMapper.toDto(saved);
+    }
+
+    @Override
+    public OrderItemDto getOrderItemFromOrder(Long orderId, Long orderItemId) {
+        Order order = orderRepository.findWithOrderItemsById(orderId).orElseThrow(
+                () -> new EntityNotFoundException("Can't find order with id: "
+                        + orderId));
+
+        OrderItem orderItem = order.getOrderItems().stream()
+                .filter(i -> i.getId().equals(orderItemId))
+                .findFirst().orElseThrow(
+                        () -> new EntityNotFoundException("Can't find order item with id: "
+                                + orderItemId + " in order with id"));
+        return orderItemMapper.toDto(orderItem);
+    }
+
+    @Override
+    public OrderDto getOrder(Long orderId) {
+        Order order = orderRepository.findWithOrderItemsById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find order with id: "
+                        + orderId));
+        orderOwnerValidator(order);
+        return orderMapper.toDto(order);
     }
 
     private OrderDto mapShoppingCartDtoToOrderDto(ShoppingCartDto shoppingCartDto) {
@@ -73,5 +104,11 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setStatus(Status.PENDING.name());
 
         return orderDto;
+    }
+
+    private void orderOwnerValidator(Order order) {
+        if (!order.getId().equals(userService.getCurrentUserId())) {
+            throw new AccessDeniedException("You dont have access to this order");
+        }
     }
 }
