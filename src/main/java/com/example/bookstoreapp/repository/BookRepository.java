@@ -1,6 +1,7 @@
 package com.example.bookstoreapp.repository;
 
 import com.example.bookstoreapp.model.Book;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -22,4 +23,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @EntityGraph(value = "book-with-categories", type = EntityGraph.EntityGraphType.LOAD)
     Page<Book> findAll(Pageable pageable);
+
+    @Query("SELECT b.price FROM Book b WHERE b.id = :bookId")
+    BigDecimal getPriceByBookId(@Param("bookId") Long bookId);
 }

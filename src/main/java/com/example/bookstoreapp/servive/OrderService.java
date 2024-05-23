@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface OrderService {
     List<OrderDto> getAllOrders();
+
     OrderDto createOrder(PlaceOrderDto placeOrderDto);
 
     OrderDto updateStatus(StatusDto statusDto);

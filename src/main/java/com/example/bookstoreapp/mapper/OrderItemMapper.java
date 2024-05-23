@@ -14,6 +14,5 @@ public interface OrderItemMapper {
     @Mapping(source = "book.id", target = "bookId")
     OrderItemDto toDto(OrderItem orderItem);
 
-
     OrderItem toEntity(OrderItemDto orderItemDto);
 }

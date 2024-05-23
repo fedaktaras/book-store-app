@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Order", description = "Order")
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/order")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Get all from shopping orders", description = "Get all from shopping orders")
+    @Operation(summary = "Get all orders", description = "Get all orders")
     @ResponseStatus(HttpStatus.OK)
     public List<OrderDto> getAllOrders() {
         return orderService.getAllOrders();

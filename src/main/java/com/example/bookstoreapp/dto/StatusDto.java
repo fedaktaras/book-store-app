@@ -1,7 +1,9 @@
 package com.example.bookstoreapp.dto;
 
 import com.example.bookstoreapp.model.Status;
+import lombok.Data;
 
+@Data
 public class StatusDto {
-    Status status;
+    private Status status;
 }
