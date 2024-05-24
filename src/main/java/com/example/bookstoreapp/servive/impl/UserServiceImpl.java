@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
         newUser.setRoles(Set.of(userRole));
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(newUser);
+        newUser.setShoppingCart(shoppingCart);
         User savedUser = userRepository.save(newUser);
         return userMapper.toDto(savedUser);
     }
