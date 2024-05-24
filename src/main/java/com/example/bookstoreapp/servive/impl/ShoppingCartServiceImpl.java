@@ -12,40 +12,35 @@ import com.example.bookstoreapp.repository.ShoppingCartRepository;
 import com.example.bookstoreapp.repository.UserRepository;
 import com.example.bookstoreapp.servive.ShoppingCartService;
 import com.example.bookstoreapp.servive.UserService;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ShoppingCartServiceImpl implements ShoppingCartService {
-    @Autowired
-    private CartItemMapper cartItemMapper;
-    @Autowired
-    private ShoppingCartMapper shoppingCartMapper;
+    private final CartItemMapper cartItemMapper;
+    private final ShoppingCartMapper shoppingCartMapper;
     private final CartItemRepository cartItemRepository;
     private final ShoppingCartRepository shoppingCartRepository;
     private final UserService userService;
     private final UserRepository userRepository;
+    private final EntityManager entityManager;
 
     @Override
     @Transactional
-    public ShoppingCartDto addItem(CartItemDto cartItemDto) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user;
-        if (principal instanceof User) {
-            user = (User) principal;
-        } else {
-            throw new RuntimeException("Smth gone wrong");
-        }
-
-        ShoppingCart shoppingCart = shoppingCartRepository.findById(user.getId()).orElseThrow();
+    public ShoppingCartDto addItem(CartItemDto cartItemDto, User user) {
+        Long userId = user.getId();
+        ShoppingCart shoppingCart = shoppingCartRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("Can't find Shopping cart by id: "
+                + userId));
         CartItem newCartItem = cartItemMapper.toEntity(cartItemDto);
         newCartItem.setShoppingCart(shoppingCart);
+        shoppingCart.setUser(user);
 
         boolean itemExists = false;
         for (CartItem item : shoppingCart.getCartItems()) {
@@ -58,9 +53,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (!itemExists) {
             shoppingCart.getCartItems().add(newCartItem);
         }
-
-        user.setShoppingCart(shoppingCart);
+        if (!entityManager.contains(user)) {
+            user = entityManager.merge(user);
+        }
         shoppingCart.setUser(user);
+
         userRepository.save(user);
         return shoppingCartMapper.toDto(shoppingCart);
     }
@@ -75,7 +72,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto editCartItem(Long id, CartItemDto cartItemDto) {
+    public ShoppingCartDto editCartItem(Long id, CartItemDto cartItemDto, Long userId) {
         ShoppingCart usersShoppingCart = getCurrentUsersShoppingCart();
         CartItem cartItem = cartItemMapper.toEntity(cartItemDto);
         cartItem.setShoppingCart(usersShoppingCart);
@@ -85,9 +82,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto getShoppingCart() {
-        ShoppingCart shoppingCart = shoppingCartRepository
-                .findById(userService.getCurrentUserId()).orElseThrow();
+    public ShoppingCartDto getShoppingCart(Long id) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cant get shopping cart"));
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
