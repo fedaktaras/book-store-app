@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10
+      author: Taras_Fedak
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: shopping_cart
+      changes:
+        - createTable:
+            tableName: shopping_cart
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: shopping_cart
+            baseColumnNames: id
+            constraintName: fk_shopping_cart_user
+            referencedTableName: users
+            referencedColumnNames: id
+      rollback:
+        - dropTable:
+            tableName: shopping_cart
