@@ -2,12 +2,14 @@ package com.example.bookstoreapp.controller;
 
 import com.example.bookstoreapp.dto.CartItemDto;
 import com.example.bookstoreapp.dto.ShoppingCartDto;
+import com.example.bookstoreapp.model.User;
 import com.example.bookstoreapp.servive.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,16 +31,17 @@ public class ShoppingCartController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get all from shopping cart", description = "Get all from shopping cart")
     @ResponseStatus(HttpStatus.OK)
-    ShoppingCartDto getShoppingCart() {
-        return shoppingCartService.getShoppingCart();
+    ShoppingCartDto getShoppingCart(Authentication authentication) {
+        return shoppingCartService.getShoppingCart(getId(authentication));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Add item to shopping cart", description = "Add item to shopping cart")
     @ResponseStatus(HttpStatus.CREATED)
-    public ShoppingCartDto addItem(@RequestBody CartItemDto cartItemDto) {
-        return shoppingCartService.addItem(cartItemDto);
+    public ShoppingCartDto addItem(@RequestBody CartItemDto cartItemDto,
+                                   Authentication authentication) {
+        return shoppingCartService.addItem(cartItemDto, (User) authentication.getPrincipal());
     }
 
     @DeleteMapping("/cart-items/{id}")
@@ -54,7 +57,12 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Edit Cart Item", description = "Edit Cart Item")
     public ShoppingCartDto editCartItem(@PathVariable Long id,
-                                        @RequestBody CartItemDto cartItemDto) {
-        return shoppingCartService.editCartItem(id, cartItemDto);
+                                        @RequestBody CartItemDto cartItemDto,
+                                        Authentication authentication) {
+        return shoppingCartService.editCartItem(id, cartItemDto, getId(authentication));
+    }
+
+    private Long getId(Authentication authentication) {
+        return ((User) authentication.getPrincipal()).getId();
     }
 }
