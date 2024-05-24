@@ -111,4 +111,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart.setCartItems(new HashSet<CartItem>());
         shoppingCartRepository.save(shoppingCart);
     }
+
+    @Override
+    public ShoppingCart getCurrentUserShoppingCart() {
+        return shoppingCartRepository.findById(userService.getCurrentUserId())
+                .orElseThrow(() -> new RuntimeException("Can't find shopping cart"
+                        + " by user id"));
+    }
 }

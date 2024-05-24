@@ -65,10 +65,4 @@ public class UserServiceImpl implements UserService {
         return getCurrentUser().getId();
     }
 
-    @Override
-    public ShoppingCart getCurrentUserShoppingCart() {
-        return shoppingCartRepository.findById(getCurrentUserId())
-                .orElseThrow(() -> new RuntimeException("Can't find shopping cart"
-                        + " by user id"));
-    }
 }
