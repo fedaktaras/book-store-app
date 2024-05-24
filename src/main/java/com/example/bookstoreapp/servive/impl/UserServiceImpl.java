@@ -13,7 +13,6 @@ import com.example.bookstoreapp.servive.UserService;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,18 +48,5 @@ public class UserServiceImpl implements UserService {
             throw new RegistrationException("User with such email: %s already exists"
                     .formatted(optionalUser.get().getEmail()));
         }
-    }
-
-    public User getCurrentUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof User) {
-            return (User) principal;
-        } else {
-            throw new RuntimeException("User not authenticated");
-        }
-    }
-
-    public Long getCurrentUserId() {
-        return getCurrentUser().getId();
     }
 }
