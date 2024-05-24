@@ -4,6 +4,7 @@ import com.example.bookstoreapp.dto.OrderDto;
 import com.example.bookstoreapp.dto.OrderItemDto;
 import com.example.bookstoreapp.dto.PlaceOrderDto;
 import com.example.bookstoreapp.dto.StatusDto;
+import com.example.bookstoreapp.model.User;
 import com.example.bookstoreapp.servive.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,8 +41,10 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Place an order", description = "Place an order")
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderDto createOrder(@RequestBody PlaceOrderDto placeOrderDto) {
-        return orderService.createOrder(placeOrderDto);
+    public OrderDto createOrder(@RequestBody PlaceOrderDto placeOrderDto,
+                                Authentication authentication) {
+        Long id = ((User) authentication.getPrincipal()).getId();
+        return orderService.createOrder(placeOrderDto, id);
     }
 
     @PatchMapping("/{id}")

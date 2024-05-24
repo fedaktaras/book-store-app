@@ -47,8 +47,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDto createOrder(PlaceOrderDto placeOrderDto) {
-        ShoppingCartDto shoppingCartDto = shoppingCartService.getShoppingCart();
+    public OrderDto createOrder(PlaceOrderDto placeOrderDto, Long id) {
+        ShoppingCartDto shoppingCartDto = shoppingCartService.getShoppingCart(id);
         Order order = orderMapper.toEntity(mapShoppingCartDtoToOrderDto(shoppingCartDto));
         Order saved = orderRepository.save(order);
         shoppingCartService.clearShoppingCart();
@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findWithOrderItemsById(orderId).orElseThrow(
                 () -> new EntityNotFoundException("Can't find order with id: "
                         + orderId));
-
+        orderOwnerValidator(order);
         OrderItem orderItem = order.getOrderItems().stream()
                 .filter(i -> i.getId().equals(orderItemId))
                 .findFirst().orElseThrow(
