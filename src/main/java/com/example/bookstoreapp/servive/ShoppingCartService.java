@@ -11,6 +11,4 @@ public interface ShoppingCartService {
     ShoppingCartDto getShoppingCart();
 
     ShoppingCartDto editCartItem(Long id, CartItemDto cartItemDto);
-
-    void clearShoppingCart();
 }
