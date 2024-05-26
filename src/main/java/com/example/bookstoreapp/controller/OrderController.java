@@ -73,6 +73,6 @@ public class OrderController {
     }
 
     private Long getUserId(Authentication authentication) {
-        return  ((User) authentication.getPrincipal()).getId();
+        return ((User) authentication.getPrincipal()).getId();
     }
 }

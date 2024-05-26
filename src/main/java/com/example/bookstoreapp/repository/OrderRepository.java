@@ -20,7 +20,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @EntityGraph(attributePaths = "orderItems")
     Optional<Order> findWithOrderItemsById(Long id);
 
-    @Query("SELECT oi FROM OrderItem oi WHERE oi.id = :orderItemId AND oi.order.id = :orderId AND oi.order.user.id = :userId")
+    @Query("SELECT oi FROM OrderItem oi WHERE oi.id = :orderItemId "
+            + "AND oi.order.id = :orderId AND oi.order.user.id = :userId")
     Optional<OrderItem> findOrderItemByIdAndOrderIdAndUserId(@Param("orderItemId") Long orderItemId,
                                                              @Param("orderId") Long orderId,
                                                              @Param("userId") Long userId);
