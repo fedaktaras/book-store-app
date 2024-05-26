@@ -47,8 +47,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDto createOrder(PlaceOrderDto placeOrderDto, Long id) {
-        ShoppingCartDto shoppingCartDto = shoppingCartService.getShoppingCart(id);
+    public OrderDto createOrder(PlaceOrderDto placeOrderDto, Long userId) {
+        ShoppingCartDto shoppingCartDto = shoppingCartService.getShoppingCart(userId);
         Order order = orderMapper.toEntity(mapShoppingCartDtoToOrderDto(shoppingCartDto));
         Order saved = orderRepository.save(order);
         shoppingCartService.clearShoppingCart();

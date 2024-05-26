@@ -43,8 +43,8 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public OrderDto createOrder(@RequestBody PlaceOrderDto placeOrderDto,
                                 Authentication authentication) {
-        Long id = ((User) authentication.getPrincipal()).getId();
-        return orderService.createOrder(placeOrderDto, id);
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        return orderService.createOrder(placeOrderDto, userId);
     }
 
     @PatchMapping("/{id}")

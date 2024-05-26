@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface UserMapper {
     @Mapping(target = "id", ignore = true)
-    User registerUserDtoToUser(UserRegistrationRequestDto dto);
+    User toEntity(UserRegistrationRequestDto dto);
 
-    UserResponseDto userToUserResponseDto(User user);
+    UserResponseDto toDto(User user);
 }
