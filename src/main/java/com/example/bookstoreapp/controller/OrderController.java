@@ -8,6 +8,7 @@ import com.example.bookstoreapp.model.User;
 import com.example.bookstoreapp.servive.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,10 +42,9 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Place an order", description = "Place an order")
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderDto createOrder(@RequestBody PlaceOrderDto placeOrderDto,
+    public OrderDto createOrder(@RequestBody @Valid PlaceOrderDto placeOrderDto,
                                 Authentication authentication) {
-        Long userId = ((User) authentication.getPrincipal()).getId();
-        return orderService.createOrder(placeOrderDto, userId);
+        return orderService.createOrder(placeOrderDto, getUserId(authentication));
     }
 
     @PatchMapping("/{id}")
@@ -59,8 +59,9 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get order item", description = "Get order item")
     @ResponseStatus(HttpStatus.OK)
-    public OrderItemDto getOrderItem(@PathVariable Long orderId, @PathVariable Long itemId) {
-        return orderService.getOrderItemFromOrder(orderId, itemId);
+    public OrderItemDto getOrderItem(@PathVariable Long orderId, @PathVariable Long itemId,
+                                     Authentication authentication) {
+        return orderService.getOrderItemFromOrder(orderId, itemId, getUserId(authentication));
     }
 
     @GetMapping("{orderId}/items")
@@ -69,5 +70,9 @@ public class OrderController {
     @ResponseStatus(HttpStatus.OK)
     public OrderDto getOrder(@PathVariable Long orderId) {
         return orderService.getOrder(orderId);
+    }
+
+    private Long getUserId(Authentication authentication) {
+        return  ((User) authentication.getPrincipal()).getId();
     }
 }

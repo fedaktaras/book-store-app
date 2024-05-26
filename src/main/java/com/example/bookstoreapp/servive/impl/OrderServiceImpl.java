@@ -21,6 +21,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -57,22 +58,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto updateStatus(StatusDto statusDto, Long id) {
-        Order order = orderRepository.findById(id).orElseThrow();
+        Order order = orderRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Could not find find order wit id: " + id)
+        );
         order.setStatus(statusDto.getStatus());
         Order saved = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }
 
     @Override
-    public OrderItemDto getOrderItemFromOrder(Long orderId, Long orderItemId) {
-        Order order = orderRepository.findWithOrderItemsById(orderId).orElseThrow(
-                () -> new EntityNotFoundException("Can't find order with id: "
-                        + orderId));
-        orderOwnerValidator(order);
-        OrderItem orderItem = order.getOrderItems().stream()
-                .filter(i -> i.getId().equals(orderItemId))
-                .findFirst().orElseThrow(
-                        () -> new EntityNotFoundException("Can't find order item with id: "
+    public OrderItemDto getOrderItemFromOrder(Long orderId, Long orderItemId, Long userId) {
+        OrderItem orderItem = orderRepository.findOrderItemByIdAndOrderIdAndUserId(
+                orderItemId, orderId, userId
+        ).orElseThrow(() -> new EntityNotFoundException("Can't find order item with id: "
                                 + orderItemId + " in order with id"));
         return orderItemMapper.toDto(orderItem);
     }

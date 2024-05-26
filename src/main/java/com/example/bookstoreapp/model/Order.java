@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE orders SET is_deleted = true WHERE id=?")
@@ -37,8 +39,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
+    @EqualsAndHashCode.Exclude
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -55,6 +59,7 @@ public class Order {
     private String shippingAddress;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
     private Set<OrderItem> orderItems;
 
     @Column(name = "is_deleted", nullable = false)
