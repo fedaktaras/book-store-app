@@ -11,16 +11,19 @@ import lombok.Data;
 public class UserRegistrationRequestDto {
     @NotBlank
     @Email
-    @Size(max = 255)
     private String email;
+
     @NotBlank
-    @Size(min = 8, max = 50, message = "Password must be between 8 and 50 characters long")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
     @NotBlank
     private String passwordRepeated;
+
     @NotBlank
     private String firstName;
+
     @NotBlank
     private String lastName;
+
     private String shippingAddress;
 }
