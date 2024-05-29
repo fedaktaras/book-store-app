@@ -19,7 +19,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: status
-                  type: ENUM('pending', 'shipped', 'delivered', 'cancelled')
+                  type: ENUM('PENDING', 'SHIPPED', 'DELIVERED', 'CANCELED')
                   constraints:
                     nullable: false
               - column:

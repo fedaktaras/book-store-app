@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByUser(User user);
 
+    List<Order> findByUserId(Long id);
+
     Optional<Order> findById(Long id);
 
     @EntityGraph(attributePaths = "orderItems")

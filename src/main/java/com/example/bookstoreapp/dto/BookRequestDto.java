@@ -26,5 +26,6 @@ public class BookRequestDto {
     private String description;
     @NotNull
     private String coverImage;
+    @NotNull
     private Set<Long> categoryIds;
 }

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Shopping cart", description = "Shopping cart")
+@Tag(name = "Shopping cart", description = "Shopping cart management by User")
 @RestController
 @RequestMapping("/cart")
 @RequiredArgsConstructor
@@ -29,7 +29,8 @@ public class ShoppingCartController {
 
     @GetMapping
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Get all from shopping cart", description = "Get all from shopping cart")
+    @Operation(summary = "Get all from shopping cart", description = "Get all from shopping cart "
+            + "of current User")
     @ResponseStatus(HttpStatus.OK)
     ShoppingCartDto getShoppingCart(Authentication authentication) {
         return shoppingCartService.getShoppingCart(getId(authentication));
@@ -37,7 +38,8 @@ public class ShoppingCartController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Add item to shopping cart", description = "Add item to shopping cart")
+    @Operation(summary = "Add to shopping cart", description = "Add item to shopping cart of "
+            + "current User")
     @ResponseStatus(HttpStatus.CREATED)
     public ShoppingCartDto addItem(@RequestBody CartItemDto cartItemDto,
                                    Authentication authentication) {
@@ -46,8 +48,8 @@ public class ShoppingCartController {
 
     @DeleteMapping("/cart-items/{id}")
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Delete item from shopping cart",
-            description = "Delete item from shopping cart")
+    @Operation(summary = "Delete from shopping cart",
+            description = "Delete item from current User's shopping cart")
     public void deleteCartItem(@PathVariable Long id) {
         shoppingCartService.deleteById(id);
     }
@@ -55,7 +57,7 @@ public class ShoppingCartController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Edit Cart Item", description = "Edit Cart Item")
+    @Operation(summary = "Edit Cart Item", description = "Edit Cart Item If User is an owner")
     public ShoppingCartDto editCartItem(@PathVariable Long id,
                                         @RequestBody CartItemDto cartItemDto,
                                         Authentication authentication) {

@@ -58,7 +58,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
         shoppingCart.setUser(user);
 
-        userRepository.save(user);
+        shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toDto(shoppingCart);
     }
 

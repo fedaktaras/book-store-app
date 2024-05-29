@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Order", description = "Order")
+@Tag(name = "Order", description = "Endpoints for managing orders")
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
@@ -32,15 +32,16 @@ public class OrderController {
 
     @GetMapping
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Get all orders", description = "Get all orders")
+    @Operation(summary = "Get all orders", description = "Get all orders of current user")
     @ResponseStatus(HttpStatus.OK)
-    public List<OrderDto> getAllOrders() {
-        return orderService.getAllOrders();
+    public List<OrderDto> getAllOrders(Authentication authentication) {
+        return orderService.getAllOrders(getUserId(authentication));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Place an order", description = "Place an order")
+    @Operation(summary = "Place an order", description = "Place an order with items that are "
+            + "currently in shopping cart")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderDto createOrder(@RequestBody @Valid PlaceOrderDto placeOrderDto,
                                 Authentication authentication) {
@@ -49,7 +50,8 @@ public class OrderController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Update status", description = "Update status")
+    @Operation(summary = "Update status", description = "Update status of some order. Made by "
+            + "Admin only")
     @ResponseStatus(HttpStatus.OK)
     public OrderDto updateStatus(@RequestBody StatusDto statusDto, @PathVariable Long id) {
         return orderService.updateStatus(statusDto, id);
@@ -57,7 +59,8 @@ public class OrderController {
 
     @GetMapping("{orderId}/items/{itemId}")
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Get order item", description = "Get order item")
+    @Operation(summary = "Get order item", description = "Get order item if that OrderItem "
+            + "belongs to current User")
     @ResponseStatus(HttpStatus.OK)
     public OrderItemDto getOrderItem(@PathVariable Long orderId, @PathVariable Long itemId,
                                      Authentication authentication) {
@@ -66,7 +69,8 @@ public class OrderController {
 
     @GetMapping("{orderId}/items")
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Get order item", description = "Get order item")
+    @Operation(summary = "Get order", description = "Get order by Id if order belongs to current "
+            + "User")
     @ResponseStatus(HttpStatus.OK)
     public OrderDto getOrder(@PathVariable Long orderId) {
         return orderService.getOrder(orderId);
