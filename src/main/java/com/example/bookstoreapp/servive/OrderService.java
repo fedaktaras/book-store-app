@@ -15,5 +15,5 @@ public interface OrderService {
 
     OrderItemDto getOrderItemFromOrder(Long orderId, Long orderItemId, Long userId);
 
-    OrderDto getOrder(Long orderId);
+    OrderDto getOrder(Long orderId, Long userId);
 }

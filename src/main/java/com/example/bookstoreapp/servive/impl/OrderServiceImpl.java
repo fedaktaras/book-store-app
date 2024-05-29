@@ -10,10 +10,8 @@ import com.example.bookstoreapp.model.Order;
 import com.example.bookstoreapp.model.OrderItem;
 import com.example.bookstoreapp.model.ShoppingCart;
 import com.example.bookstoreapp.model.Status;
-import com.example.bookstoreapp.repository.BookRepository;
 import com.example.bookstoreapp.repository.OrderRepository;
 import com.example.bookstoreapp.repository.ShoppingCartRepository;
-import com.example.bookstoreapp.repository.UserRepository;
 import com.example.bookstoreapp.servive.OrderService;
 import com.example.bookstoreapp.servive.ShoppingCartService;
 import com.example.bookstoreapp.servive.UserService;
@@ -25,21 +23,18 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    private final BookRepository bookRepository;
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final ShoppingCartService shoppingCartService;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
     private final ShoppingCartRepository shoppingCartRepository;
-    private final UserRepository userRepository;
 
     @Override
     public List<OrderDto> getAllOrders(Long id) {
@@ -47,7 +42,6 @@ public class OrderServiceImpl implements OrderService {
         return allByUser.stream()
                 .map(orderMapper::toDto)
                 .toList();
-
     }
 
     @Override
@@ -84,11 +78,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto getOrder(Long orderId) {
-        Order order = orderRepository.findWithOrderItemsById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Can't find order with id: "
+    public OrderDto getOrder(Long orderId, Long userId) {
+        Order order = orderRepository.findWithOrderItemsByIdAndUserId(orderId, userId)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find your order with id: "
                         + orderId));
-        orderOwnerValidator(order);
         return orderMapper.toDto(order);
     }
 
@@ -114,11 +107,5 @@ public class OrderServiceImpl implements OrderService {
                         .getPrice()
                         .multiply(BigDecimal.valueOf(i.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    private void orderOwnerValidator(Order order) {
-        if (!order.getId().equals(userService.getCurrentUserId())) {
-            throw new AccessDeniedException("You dont have access to this order");
-        }
     }
 }
