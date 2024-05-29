@@ -9,7 +9,6 @@ import com.example.bookstoreapp.model.ShoppingCart;
 import com.example.bookstoreapp.model.User;
 import com.example.bookstoreapp.repository.CartItemRepository;
 import com.example.bookstoreapp.repository.ShoppingCartRepository;
-import com.example.bookstoreapp.repository.UserRepository;
 import com.example.bookstoreapp.servive.ShoppingCartService;
 import com.example.bookstoreapp.servive.UserService;
 import jakarta.persistence.EntityManager;
@@ -28,7 +27,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemRepository cartItemRepository;
     private final ShoppingCartRepository shoppingCartRepository;
     private final UserService userService;
-    private final UserRepository userRepository;
     private final EntityManager entityManager;
 
     @Override
@@ -58,7 +56,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
         shoppingCart.setUser(user);
 
-        userRepository.save(user);
+        shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
@@ -105,10 +103,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     public void clearShoppingCart() {
         ShoppingCart shoppingCart = getCurrentUsersShoppingCart();
-        shoppingCart.getCartItems().forEach(cartItem -> {
-            cartItemRepository.deleteById(cartItem.getId());
-        });
-        shoppingCart.setCartItems(new HashSet<CartItem>());
+        shoppingCart.getCartItems().forEach(
+                cartItem -> cartItemRepository.deleteById(cartItem.getId()));
+        shoppingCart.setCartItems(new HashSet<>());
         shoppingCartRepository.save(shoppingCart);
     }
 
