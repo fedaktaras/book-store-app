@@ -1,5 +1,5 @@
 
-# Online Bookstore API
+# Book Store App
 
 ## Project Overview
 
