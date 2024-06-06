@@ -1,6 +1,7 @@
 
-# Book Store App
 
+![Book Store App.jpeg](readmeImg%2FBook%20Store%20App.jpeg)
+# Book Store App
 ## Project Overview
 
 This project is a Book Store application built using Java and Spring Boot. It is designed to manage a catalog of books, provide user authentication and authorization, and ensure secure access to various operations. The project supports CRUD operations for book management and includes a user-friendly interface for accessing the API documentation through Swagger UI.
