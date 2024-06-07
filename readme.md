@@ -69,7 +69,7 @@ This project is a Book Store application built using Java and Spring Boot. It is
 
 1. Build the Docker image:
     ```bash
-    docker-compose up
+    docker-compose up --build
     ```
 
 * * *
