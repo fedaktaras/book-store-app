@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 14
+      author: Taras_Fedak
+      changes:
+        - sqlFile:
+            path: db/changelog/initial-inserts.sql
+            relativeToChangelogFile: false
+            endDelimiter: ";"
