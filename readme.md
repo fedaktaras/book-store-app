@@ -59,7 +59,8 @@ This project is a Book Store application built using Java and Spring Boot. It is
     ```bash
     mvn clean install
     ```
-4. Run the application:
+4. Rename .env.sample to .env and customize data if needed (keep the secret untouched to have access to preinstalled data). Add it to environment variables.
+5. Run the application:
     ```bash
     mvn spring-boot:run
     ```
