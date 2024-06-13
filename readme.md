@@ -63,11 +63,12 @@ This project is a Book Store application built using Java and Spring Boot. It is
     ```bash
     mvn spring-boot:run
     ```
-   The server will start on `http://localhost:8080`.
+   [The server will start on](http://localhost:8080).
 
 ### Using Docker
 
-1. Build the Docker image:
+1. Rename .env.sample to .env and customize data if needed (keep the secret untouched to have access to preinstalled data)
+2. Build the Docker image:
     ```bash
     docker-compose up --build
     ```
