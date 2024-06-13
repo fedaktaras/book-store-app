@@ -2,6 +2,7 @@ package com.example.bookstoreapp.mapper;
 
 import com.example.bookstoreapp.config.MapperConfig;
 import com.example.bookstoreapp.dto.CartItemDto;
+import com.example.bookstoreapp.dto.CartItemRequestDto;
 import com.example.bookstoreapp.model.Book;
 import com.example.bookstoreapp.model.CartItem;
 import org.mapstruct.Mapper;
@@ -16,6 +17,9 @@ public interface CartItemMapper {
 
     @Mapping(source = "bookId", target = "book.id")
     CartItem toEntity(CartItemDto cartItemDto);
+
+    @Mapping(source = "bookId", target = "book.id")
+    CartItem toEntity(CartItemRequestDto cartItemRequestDto);
 
     default Book map(Long bookId) {
         if (bookId == null) {
