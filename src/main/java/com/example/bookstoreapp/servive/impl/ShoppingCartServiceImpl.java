@@ -1,6 +1,7 @@
 package com.example.bookstoreapp.servive.impl;
 
 import com.example.bookstoreapp.dto.CartItemDto;
+import com.example.bookstoreapp.dto.CartItemRequestDto;
 import com.example.bookstoreapp.dto.ShoppingCartDto;
 import com.example.bookstoreapp.mapper.CartItemMapper;
 import com.example.bookstoreapp.mapper.ShoppingCartMapper;
@@ -31,12 +32,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @Transactional
-    public ShoppingCartDto addItem(CartItemDto cartItemDto, User user) {
+    public ShoppingCartDto addItem(CartItemRequestDto cartItemRequestDto, User user) {
         Long userId = user.getId();
         ShoppingCart shoppingCart = shoppingCartRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Can't find Shopping cart by id: "
                 + userId));
-        CartItem newCartItem = cartItemMapper.toEntity(cartItemDto);
+        CartItem newCartItem = cartItemMapper.toEntity(cartItemRequestDto);
         newCartItem.setShoppingCart(shoppingCart);
         shoppingCart.setUser(user);
 
@@ -61,9 +62,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        ShoppingCart shoppingCart = getCurrentUsersShoppingCart();
-        CartItem cartItem = getCartItemFromUsersShoppingCart(id);
+    public void deleteById(Long id, Long userId) {
+        ShoppingCart shoppingCart = getUsersShoppingCartById(userId);
+        CartItem cartItem = getCartItemFromUsersShoppingCart(id,userId);
         shoppingCart.getCartItems().remove(cartItem);
         shoppingCartRepository.save(shoppingCart);
         cartItemRepository.deleteById(id);
@@ -71,7 +72,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto editCartItem(Long id, CartItemDto cartItemDto, Long userId) {
-        ShoppingCart usersShoppingCart = getCurrentUsersShoppingCart();
+        ShoppingCart usersShoppingCart = getUsersShoppingCartById(userId);
         CartItem cartItem = cartItemMapper.toEntity(cartItemDto);
         cartItem.setShoppingCart(usersShoppingCart);
         cartItemRepository.save(cartItem);
@@ -86,8 +87,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
-    private CartItem getCartItemFromUsersShoppingCart(Long id) {
-        ShoppingCart shoppingCart = getCurrentUsersShoppingCart();
+    private CartItem getCartItemFromUsersShoppingCart(Long id, Long userId) {
+        ShoppingCart shoppingCart = getUsersShoppingCartById(userId);
         return shoppingCart.getCartItems().stream()
                 .filter(item -> item.getId().equals(id))
                 .findFirst()
@@ -95,14 +96,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         + "delete this item"));
     }
 
-    private ShoppingCart getCurrentUsersShoppingCart() {
-        Long userId = userService.getCurrentUserId();
+    private ShoppingCart getUsersShoppingCartById(Long userId) {
         return shoppingCartRepository.findById(userId).get();
     }
 
     @Transactional
-    public void clearShoppingCart() {
-        ShoppingCart shoppingCart = getCurrentUsersShoppingCart();
+    public void clearShoppingCart(Long userId) {
+        ShoppingCart shoppingCart = getUsersShoppingCartById(userId);
         shoppingCart.getCartItems().forEach(
                 cartItem -> cartItemRepository.deleteById(cartItem.getId()));
         shoppingCart.setCartItems(new HashSet<>());

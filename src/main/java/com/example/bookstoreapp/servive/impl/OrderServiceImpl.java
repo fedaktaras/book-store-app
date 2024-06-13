@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
         }
         Order order = createNewOrder(placeOrderDto, shoppingCart);
         Order saved = orderRepository.save(order);
-        shoppingCartService.clearShoppingCart();
+        shoppingCartService.clearShoppingCart(userId);
         return orderMapper.toDto(saved);
     }
 

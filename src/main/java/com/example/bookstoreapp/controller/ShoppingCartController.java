@@ -1,6 +1,7 @@
 package com.example.bookstoreapp.controller;
 
 import com.example.bookstoreapp.dto.CartItemDto;
+import com.example.bookstoreapp.dto.CartItemRequestDto;
 import com.example.bookstoreapp.dto.ShoppingCartDto;
 import com.example.bookstoreapp.model.User;
 import com.example.bookstoreapp.servive.ShoppingCartService;
@@ -41,9 +42,9 @@ public class ShoppingCartController {
     @Operation(summary = "Add to shopping cart", description = "Add item to shopping cart of "
             + "current User")
     @ResponseStatus(HttpStatus.CREATED)
-    public ShoppingCartDto addItem(@RequestBody CartItemDto cartItemDto,
+    public ShoppingCartDto addItem(@RequestBody CartItemRequestDto cartItemRequestDto,
                                    @AuthenticationPrincipal User user) {
-        return shoppingCartService.addItem(cartItemDto, user);
+        return shoppingCartService.addItem(cartItemRequestDto, user);
     }
 
     @DeleteMapping("/cart-items/{id}")
@@ -51,7 +52,7 @@ public class ShoppingCartController {
     @Operation(summary = "Delete from shopping cart",
             description = "Delete item from current User's shopping cart")
     public void deleteCartItem(@PathVariable Long id, @AuthenticationPrincipal User user) {
-        shoppingCartService.deleteById(user.getId());
+        shoppingCartService.deleteById(id, user.getId());
     }
 
     @PutMapping("/{id}")
