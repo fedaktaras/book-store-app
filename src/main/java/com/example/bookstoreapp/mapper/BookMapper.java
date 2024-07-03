@@ -24,6 +24,7 @@ public abstract class BookMapper {
 
     public abstract BookDto toDtoBook(Book book);
 
+    @Mapping(source = "categoryIds", target = "categories")
     public abstract Book toBook(BookRequestDto bookRequestDto);
 
     public abstract Book toBook(BookUpdateDto bookUpdateDto);
