@@ -1,0 +1,604 @@
+databaseChangeLog:
+  - changeSet:
+      id: 14
+      author: Taras_Fedak
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: 'boris@example.com'
+              - column:
+                  name: password
+                  value: '$2a$10$uKS3BWxsjJ5b5l00ZQ9ISOhfR8yNejfm/SZCuKhAi4F7MBWnBsxG6'
+              - column:
+                  name: first_name
+                  value: 'Boris'
+              - column:
+                  name: last_name
+                  value: 'Johnson'
+              - column:
+                  name: shipping_address
+                  value: '5678 Fourth Ave, Next City, Country'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: shopping_cart
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "(SELECT id FROM users WHERE email = 'tarasfedak@me.com')"
+        - insert:
+            tableName: shopping_cart
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "(SELECT id FROM users WHERE email = 'boris@example.com')"
+
+  - changeSet:
+      id: 15
+      author: Taras_Fedak
+      changes:
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueComputed: "(SELECT id FROM users WHERE email = 'boris@example.com')"
+              - column:
+                  name: roles_id
+                  valueNumeric: 2
+  - changeSet:
+      id: 16
+      author: Taras_Fedak
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: 'Fantasy'
+              - column:
+                  name: description
+                  value: 'Fantasy books'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: 'Science Fiction'
+              - column:
+                  name: description
+                  value: 'Sci-Fi books'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: 'Educational Literature'
+              - column:
+                  name: description
+                  value: 'Books for educational purposes'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: 'Poetry'
+              - column:
+                  name: description
+                  value: 'Poetry books'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: 'Horror'
+              - column:
+                  name: description
+                  value: 'Horror books'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+  - changeSet:
+      id: 17
+      author: Taras_Fedak
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'Effective Java'
+              - column:
+                  name: author
+                  value: 'Joshua Bloch'
+              - column:
+                  name: isbn
+                  value: '978-0134685991'
+              - column:
+                  name: price
+                  valueNumeric: 45.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/effective-java.jpg'
+              - column:
+                  name: description
+                  value: 'Best practices for Java programming'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'Java The Complete Reference'
+              - column:
+                  name: author
+                  value: 'Herbert Schildt'
+              - column:
+                  name: isbn
+                  value: '978-1260440232'
+              - column:
+                  name: price
+                  valueNumeric: 60.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/complete-reference.jpg'
+              - column:
+                  name: description
+                  value: 'Comprehensive guide to Java programming'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'Head First Java'
+              - column:
+                  name: author
+                  value: 'Kathy Sierra'
+              - column:
+                  name: isbn
+                  value: '978-0596009205'
+              - column:
+                  name: price
+                  valueNumeric: 35.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/head-first-java.jpg'
+              - column:
+                  name: description
+                  value: 'Introduction to Java programming'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'The Complete Works of Oscar Wilde'
+              - column:
+                  name: author
+                  value: 'Oscar Wilde'
+              - column:
+                  name: isbn
+                  value: '978-0007144365'
+              - column:
+                  name: price
+                  valueNumeric: 25.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/oscar-wilde.jpg'
+              - column:
+                  name: description
+                  value: 'Collected works of Oscar Wilde'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'The Raven and Other Poems'
+              - column:
+                  name: author
+                  value: 'Edgar Allan Poe'
+              - column:
+                  name: isbn
+                  value: '978-0486266855'
+              - column:
+                  name: price
+                  valueNumeric: 10.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/edgar-poe.jpg'
+              - column:
+                  name: description
+                  value: 'Collection of Edgar Allan Poe poems'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'Leaves of Grass'
+              - column:
+                  name: author
+                  value: 'Walt Whitman'
+              - column:
+                  name: isbn
+                  value: '978-0486456768'
+              - column:
+                  name: price
+                  valueNumeric: 15.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/walt-whitman.jpg'
+              - column:
+                  name: description
+                  value: 'Collection of Walt Whitman poems'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'The Shining'
+              - column:
+                  name: author
+                  value: 'Stephen King'
+              - column:
+                  name: isbn
+                  value: '978-0307743657'
+              - column:
+                  name: price
+                  valueNumeric: 20.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/the-shining.jpg'
+              - column:
+                  name: description
+                  value: 'Horror novel by Stephen King'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'It'
+              - column:
+                  name: author
+                  value: 'Stephen King'
+              - column:
+                  name: isbn
+                  value: '978-1501142970'
+              - column:
+                  name: price
+                  valueNumeric: 25.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/it.jpg'
+              - column:
+                  name: description
+                  value: 'Horror novel about a malevolent entity'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'Misery'
+              - column:
+                  name: author
+                  value: 'Stephen King'
+              - column:
+                  name: isbn
+                  value: '978-1501143106'
+              - column:
+                  name: price
+                  valueNumeric: 18.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/misery.jpg'
+              - column:
+                  name: description
+                  value: 'Thriller novel by Stephen King'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'The Hobbit'
+              - column:
+                  name: author
+                  value: 'J.R.R. Tolkien'
+              - column:
+                  name: isbn
+                  value: '978-0547928227'
+              - column:
+                  name: price
+                  valueNumeric: 15.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/the-hobbit.jpg'
+              - column:
+                  name: description
+                  value: 'Fantasy novel by J.R.R. Tolkien'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'Dune'
+              - column:
+                  name: author
+                  value: 'Frank Herbert'
+              - column:
+                  name: isbn
+                  value: '978-0441013593'
+              - column:
+                  name: price
+                  valueNumeric: 10.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/dune.jpg'
+              - column:
+                  name: description
+                  value: 'Sci-Fi novel by Frank Herbert'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'Enders Game'
+              - column:
+                  name: author
+                  value: 'Orson Scott Card'
+              - column:
+                  name: isbn
+                  value: '978-0812550702'
+              - column:
+                  name: price
+                  valueNumeric: 12.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/enders-game.jpg'
+              - column:
+                  name: description
+                  value: 'Sci-Fi novel by Orson Scott Card'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'The Dark Tower'
+              - column:
+                  name: author
+                  value: 'Stephen King'
+              - column:
+                  name: isbn
+                  value: '978-1501161806'
+              - column:
+                  name: price
+                  valueNumeric: 22.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/dark-tower.jpg'
+              - column:
+                  name: description
+                  value: 'Fantasy and horror novel by Stephen King'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'American Gods'
+              - column:
+                  name: author
+                  value: 'Neil Gaiman'
+              - column:
+                  name: isbn
+                  value: '978-0062572233'
+              - column:
+                  name: price
+                  valueNumeric: 18.00
+              - column:
+                  name: cover_image
+                  value: 'https://example.com/american-gods.jpg'
+              - column:
+                  name: description
+                  value: 'Fantasy and horror novel by Neil Gaiman'
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+  - changeSet:
+      id: 18
+      author: Taras_Fedak
+      changes:
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'Effective Java')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Educational Literature')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'Java The Complete Reference')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Educational Literature')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'Head First Java')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Educational Literature')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'The Complete Works of Oscar Wilde')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Poetry')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'The Raven and Other Poems')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Poetry')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'Leaves of Grass')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Poetry')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'The Shining')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Horror')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'It')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Horror')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'Misery')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Horror')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'The Hobbit')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Fantasy')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'Dune')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Science Fiction')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'Enders Game')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Science Fiction')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'The Dark Tower')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Fantasy')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'The Dark Tower')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Horror')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'American Gods')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Fantasy')"
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: "(SELECT id FROM books WHERE title = 'American Gods')"
+              - column:
+                  name: category_id
+                  valueComputed: "(SELECT id FROM categories WHERE name = 'Horror')"

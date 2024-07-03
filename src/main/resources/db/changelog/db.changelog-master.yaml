@@ -25,3 +25,6 @@ databaseChangeLog:
       file: db/changelog/changes/12-create-order-table.yaml
   - include:
       file: db/changelog/changes/13-create-order-item-table.yaml
+# Inserting demonstration data
+  - include:
+      file: db/changelog/changes/14-initial-inserts.yaml

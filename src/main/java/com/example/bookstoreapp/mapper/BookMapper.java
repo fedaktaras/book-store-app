@@ -6,6 +6,7 @@ import com.example.bookstoreapp.dto.BookRequestDto;
 import com.example.bookstoreapp.dto.BookUpdateDto;
 import com.example.bookstoreapp.model.Book;
 import com.example.bookstoreapp.model.Category;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
@@ -30,6 +31,9 @@ public interface BookMapper {
     void updateBookFromDto(BookUpdateDto dto, @MappingTarget Book book);
 
     default Set<Category> map(Set<Long> categoryIds) {
+        if (categoryIds == null) {
+            return Collections.emptySet();
+        }
         return categoryIds.stream()
                 .map(id -> {
                     Category category = new Category();
