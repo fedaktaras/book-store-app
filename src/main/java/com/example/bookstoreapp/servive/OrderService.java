@@ -7,7 +7,7 @@ import com.example.bookstoreapp.dto.StatusDto;
 import java.util.List;
 
 public interface OrderService {
-    List<OrderDto> getAllOrders();
+    List<OrderDto> getAllOrders(Long id);
 
     OrderDto createOrder(PlaceOrderDto placeOrderDto, Long id);
 
@@ -15,5 +15,5 @@ public interface OrderService {
 
     OrderItemDto getOrderItemFromOrder(Long orderId, Long orderItemId, Long userId);
 
-    OrderDto getOrder(Long orderId);
+    OrderDto getOrder(Long orderId, Long userId);
 }
