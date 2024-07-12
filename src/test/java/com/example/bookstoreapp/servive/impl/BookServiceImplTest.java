@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,12 +34,19 @@ class BookServiceImplTest {
     @MockBean
     private BookRepository bookRepository;
 
+    private TestDataUtils testDataUtils;
+
+    @BeforeEach
+    public void newTestDataUtils() {
+        testDataUtils = new TestDataUtils();
+    }
 
     @Test
     void save() {
-        BookRequestDto requestDto = TestDataUtils.getRequestDto("Effective Java");
-        Book book = TestDataUtils.getBook("Effective Java");
-        BookDto bookDto = TestDataUtils.getDto("Effective Java");
+        testDataUtils = new TestDataUtils();
+        BookRequestDto requestDto = testDataUtils.getRequestDto("Effective Java");
+        Book book = testDataUtils.getBook("Effective Java");
+        BookDto bookDto = testDataUtils.getDto("Effective Java");
         when(bookRepository.save(book)).thenReturn(book);
 
         BookDto savedBookDto = bookService.save(requestDto);
@@ -51,14 +59,14 @@ class BookServiceImplTest {
     void findAll() {
         Pageable pageable = PageRequest.of(0, 10);
         List<Book> books = List.of(
-                TestDataUtils.getBook("Java Concurrency in Practice"),
-                TestDataUtils.getBook("Clean Code"),
-                TestDataUtils.getBook("Effective Java")
+                testDataUtils.getBook("Java Concurrency in Practice"),
+                testDataUtils.getBook("Clean Code"),
+                testDataUtils.getBook("Effective Java")
         );
         List<BookDto> bookDtos = List.of(
-                TestDataUtils.getDto("Java Concurrency in Practice"),
-                TestDataUtils.getDto("Clean Code"),
-                TestDataUtils.getDto("Effective Java")
+                testDataUtils.getDto("Java Concurrency in Practice"),
+                testDataUtils.getDto("Clean Code"),
+                testDataUtils.getDto("Effective Java")
         );
         Page<Book> bookPage = new PageImpl<>(books, pageable, books.size());
         when(bookRepository.findAll(pageable)).thenReturn(bookPage);
@@ -72,8 +80,8 @@ class BookServiceImplTest {
 
     @Test
     void getBookById() {
-        Book book = TestDataUtils.getBook("Clean Code");
-        BookDto bookDto = TestDataUtils.getDto("Clean Code");
+        Book book = testDataUtils.getBook("Clean Code");
+        BookDto bookDto = testDataUtils.getDto("Clean Code");
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
         BookDto result = bookService.getBookById(1L);
@@ -84,8 +92,8 @@ class BookServiceImplTest {
 
     @Test
     void updateBook() {
-        Book book = TestDataUtils.getBook("Clean Code");
-        Book updatedBook = TestDataUtils.getBook("Clean Code");
+        Book book = testDataUtils.getBook("Clean Code");
+        Book updatedBook = testDataUtils.getBook("Clean Code");
         updatedBook.setPrice(BigDecimal.valueOf(80));
 
         BookUpdateDto bookUpdateDto = new BookUpdateDto();
@@ -103,9 +111,5 @@ class BookServiceImplTest {
 
     @Test
     void findAllByCategoryId() {
-    }
-
-    @Test
-    void deleteById() {
     }
 }

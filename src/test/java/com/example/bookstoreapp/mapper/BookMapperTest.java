@@ -5,14 +5,10 @@ import com.example.bookstoreapp.dto.BookRequestDto;
 import com.example.bookstoreapp.model.Book;
 import com.example.bookstoreapp.utils.TestDataUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Component;
-
-import lombok.Setter;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class BookMapperTest {
@@ -20,10 +16,16 @@ class BookMapperTest {
     @Autowired
     private BookMapper bookMapper;
 
+    private TestDataUtils testDataUtils;
+
+    @BeforeEach
+    public void newTestDataUtils() {
+        testDataUtils = new TestDataUtils();
+    }
     @Test
     void toBook() {
-        BookRequestDto requestDto = TestDataUtils.getRequestDto("Clean Code");
-        Book cleanCode = TestDataUtils.getBook("Clean Code");
+        BookRequestDto requestDto = testDataUtils.getRequestDto("Clean Code");
+        Book cleanCode = testDataUtils.getBook("Clean Code");
 
         Book book = bookMapper.toBook(requestDto);
         Assertions.assertEquals(cleanCode, book);
@@ -31,8 +33,8 @@ class BookMapperTest {
 
     @Test
     void toDtoBook() {
-        BookDto cleanCodeDto = TestDataUtils.getDto("Clean Code");
-        Book cleanCode = TestDataUtils.getBook("Clean Code");
+        BookDto cleanCodeDto = testDataUtils.getDto("Clean Code");
+        Book cleanCode = testDataUtils.getBook("Clean Code");
         BookDto dtoBook = bookMapper.toDtoBook(cleanCode);
 
         Assertions.assertEquals(dtoBook, cleanCodeDto);

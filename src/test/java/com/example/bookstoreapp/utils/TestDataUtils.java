@@ -11,29 +11,29 @@ import com.example.bookstoreapp.model.Category;
 import java.util.stream.Collectors;
 
 public class TestDataUtils {
-    private static final HashMap<String, BookRequestDto> testRequestDto = new HashMap<>();
-    private static final HashMap<String, BookDto> testDto = new HashMap<>();
-    private static final HashMap<String, Book> testBooks = new HashMap<>();
+    private final HashMap<String, BookRequestDto> testRequestDto = new HashMap<>();
+    private final HashMap<String, BookDto> testDto = new HashMap<>();
+    private final HashMap<String, Book> testBooks = new HashMap<>();
 
-    static {
+    public TestDataUtils() {
         addTestData(
                 "Java Concurrency in Practice", new BigDecimal("55.00"),
                 "Brian Goetz", "978-0321349606",
-                "Comprehensive guide to concurrency in Java", "image3.jpg", Set.of(1L, 4L)
+                "Comprehensive guide to concurrency in Java", "image3.jpg", Set.of(1L)
         );
         addTestData(
                 "Clean Code", new BigDecimal("50.00"), "Robert C. Martin",
                 "978-0132350884", "A Handbook of Agile Software Craftsmanship",
-                "image2.jpg", Set.of(1L, 3L)
+                "image2.jpg", Set.of(1L)
         );
         addTestData(
                 "Effective Java", new BigDecimal("45.00"), "Joshua Bloch",
                 "978-0134685991", "Best practices for Java programming",
-                "image1.jpg", Set.of(1L, 2L)
+                "https://example.com/effective-java.jpg", Set.of(1L)
         );
     }
 
-    private static void addTestData(
+    private void addTestData(
             String title, BigDecimal price, String author, String isbn,
             String description, String coverImage, Set<Long> categoryIds
     ) {
@@ -53,19 +53,19 @@ public class TestDataUtils {
         testDto.put(title, bookDto);
     }
 
-    public static BookRequestDto getRequestDto(String title) {
+    public BookRequestDto getRequestDto(String title) {
         return testRequestDto.get(title);
     }
 
-    public static BookDto getDto(String title) {
+    public BookDto getDto(String title) {
         return testDto.get(title);
     }
 
-    public static Book getBook(String title) {
+    public Book getBook(String title) {
         return testBooks.get(title);
     }
 
-    private static BookRequestDto createTestBookRequestDto(
+    private BookRequestDto createTestBookRequestDto(
             String title, BigDecimal price, String author, String isbn,
             String description, String coverImage, Set<Long> categoryIds
     ) {
@@ -80,7 +80,7 @@ public class TestDataUtils {
         return dto;
     }
 
-    private static Book createTestBook(
+    private Book createTestBook(
             String title, BigDecimal price, String author, String isbn,
             String description, String coverImage, Set<Long> categoryIds
     ) {
@@ -100,7 +100,7 @@ public class TestDataUtils {
         return book;
     }
 
-    private static BookDto createTestBookDto(
+    private BookDto createTestBookDto(
             Long id, String title, BigDecimal price, String author, String isbn,
             String description, String coverImage, Set<Long> categoryIds
     ) {

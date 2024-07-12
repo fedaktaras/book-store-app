@@ -7,6 +7,7 @@ import com.example.bookstoreapp.mapper.BookMapper;
 import com.example.bookstoreapp.model.Book;
 import com.example.bookstoreapp.repository.BookRepository;
 import com.example.bookstoreapp.servive.BookService;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +18,24 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     private final BookRepository bookRepository;
+    private final EntityManager entityManager;
 
     @Autowired
-    public BookServiceImpl(BookMapper bookMapper, BookRepository bookRepository) {
+    public BookServiceImpl(
+            BookMapper bookMapper,
+            BookRepository bookRepository,
+            EntityManager entityManager
+    ) {
         this.bookMapper = bookMapper;
         this.bookRepository = bookRepository;
+        this.entityManager = entityManager;
     }
 
     @Override
     public BookDto save(BookRequestDto bookRequestDto) {
-        return bookMapper.toDtoBook(bookRepository.save(
-                bookMapper.toBook(bookRequestDto)));
+        Book entityToSave = bookMapper.toBook(bookRequestDto);
+        Book saved = bookRepository.save(entityToSave);
+        return bookMapper.toDtoBook(saved);
     }
 
     @Override
